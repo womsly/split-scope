@@ -1,0 +1,35 @@
+{
+  "name": "template-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "env-cmd -e dev vite --host",
+    "dev:local": "env-cmd -e local vite --host",
+    "dev:prod": "env-cmd -e prod vite --host",
+    "clear": "env-cmd -e prod vite clear",
+    "build": "env-cmd -e prod vite build",
+    "preview": "env-cmd -e dev vite preview",
+    "deploy": "env-cmd -e prod vite build && firebase deploy --only hosting"
+  },
+  "dependencies": {
+    "env-cmd": "^10.1.0",
+    "framer-motion": "^10.18.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.21.2",
+    "scss": "^0.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "sass": "^1.58.3",
+    "vite": "^5.0.8"
+  }
+}

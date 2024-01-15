@@ -1,0 +1,100 @@
+@import '_config';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'SF Pro Display-Medium', Helvetica;
+
+	&::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar {
+    border-radius: 4px;
+    width: 6px;
+		padding: 2px;
+	  background-color: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+		visibility: hidden;
+    background-color: $lBackGroundOpaque;
+		border: solid 0.25px $lBackGroundOpaque;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+
+		@include darkMode {
+			background-color: $dHeaderOpaque;
+			border-color: $dHeaderOpaque;
+		}
+  }
+
+	&:hover::-webkit-scrollbar-thumb {
+		visibility: visible;
+	}
+}
+
+svg:not(:root) {
+	overflow-clip-margin: 5px;
+}
+html {
+	height: 100%;
+	
+}
+body {
+	display: flex;
+	justify-content: center;
+	min-height: 100dvh;
+	background-color: $lBackGround;
+	color: $lHeaderText;
+	
+	@include darkMode {
+		color: $dSubHeaderText;
+		background-color: $dBackGround;
+	}
+	#root {
+		height: 100%;
+		width: 100%;
+		overflow-x: hidden;
+	}
+	main {
+		width: 100%;
+		height: 100%;
+
+		h1 {
+			text-shadow: $textShadowPop;
+			@include darkMode {
+				text-shadow: $textShadowPop;
+			}
+		}
+	}
+
+	input {
+		border-radius: 2px;
+		border: 1px solid $lInputBoxBorder;
+		padding: 0.3rem;
+		padding-left: 0.2rem;
+		padding-bottom: 0.1rem;
+		background-color: $lInputBoxBackground;
+		color: $lHeaderText;
+
+		&:focus-visible {
+			outline: none;
+			border-color: $lButton;
+		}
+
+		@include darkMode {
+			color-scheme: dark;
+			border: 1px solid $dInputBoxBorder;
+			background-color: $dInputBoxBackground;
+			color: $dHeaderText;
+
+			&:focus-visible {
+				border-color: $dButton;
+			}
+		}
+	}
+}
+

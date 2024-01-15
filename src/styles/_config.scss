@@ -1,0 +1,97 @@
+// website colors
+
+// light mode colors
+$lBackGround: #e0dee7;
+$lBackGroundOpaque: #aeacb6a8;
+$lHeaderText: #161515;
+$lHeaderTextOpaque: #0f0e0e8a;
+$lButton: #b90a0a;
+$lInputBoxBorder: #b2afbd;
+$lInputBoxBackground: #16151615;
+
+// dark mode colors
+$dBackGround: #161616;
+$dBackGroundOpaque: #02001ba8;
+$dHeaderText: #ebebeb;
+$dSubHeaderText: #c3c4d3;
+$dHeaderOpaque: #babfc4a1;
+$dButton: #365ddd;
+$dButtonHover: #1b3249;
+$dButtonActive: #0d253d;
+$dInputBoxBorder: #4f425c;
+$dInputBoxBackground: #ffffff15;
+
+// text shadows
+$textShadowPop: 2px 2px 1.5px rgba(7, 19, 51, 0.904);
+$textShadowLight: 2px 2px 1.5px rgba(7, 19, 51, 0.315);
+$textShadowBlur: 2px 2px 5px rgba(7, 19, 51, 0.904);
+
+// MIXINS for DarkMode and ScreenWidth
+
+$darkMode: true;
+
+// creates darkmode check
+@mixin darkMode {
+	@if($darkMode) {
+		@media(prefers-color-scheme: dark) {
+			@content
+		}
+	}
+}
+$xxsScreen: true;
+$xxsMaxWidth: 400px;
+
+@mixin xxsScreen {
+  @if($xxsScreen) {
+    @media(max-width: $xxsMaxWidth) {
+      @content
+    }
+  }
+}
+
+// phones usually
+$xsScreen: true;
+$xsMaxWidth: 680px;
+
+@mixin xsScreen {
+  @if($xsScreen) {
+    @media(max-width: $xsMaxWidth) {
+      @content
+    }
+  }
+}
+
+// large phones and portrait tablets
+$smScreen: true;
+$smMaxWidth: 900px;
+
+@mixin smScreen {
+  @if($smScreen) {
+    @media (max-width: $smMaxWidth) {
+      @content;
+    }
+  }
+}
+
+// landscape tablets and small laptops
+$mdScreen: true;
+$mdMaxWidth: 1200px;
+
+@mixin mdScreen {
+  @if($mdScreen) {
+    @media (max-width: $mdMaxWidth) {
+      @content;
+    }
+  }
+}
+
+$lgScreen: true;
+$lgMaxWidth: 2000px;
+
+@mixin lgScreen {
+  @if($lgScreen) {
+    @media (max-width: $lgMaxWidth) {
+      @content;
+    }
+  }
+}
