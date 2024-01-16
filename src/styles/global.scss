@@ -64,9 +64,9 @@ body {
 		height: 100%;
 
 		h1 {
-			text-shadow: $textShadowPop;
+			text-shadow: $textShadowLight;
 			@include darkMode {
-				text-shadow: $textShadowPop;
+				text-shadow: $textShadowLight;
 			}
 		}
 	}
@@ -79,6 +79,10 @@ body {
 		padding-bottom: 0.1rem;
 		background-color: $lInputBoxBackground;
 		color: $lHeaderText;
+		
+		&::placeholder {
+			color: $lHeaderTextOpaque;
+		}
 
 		&:focus-visible {
 			outline: none;
@@ -91,9 +95,21 @@ body {
 			background-color: $dInputBoxBackground;
 			color: $dHeaderText;
 
+			&::placeholder {
+				color: $dHeaderTextOpaque;
+			}
+
 			&:focus-visible {
 				border-color: $dButton;
 			}
+		}
+	}
+
+	a {
+		color: $lHeaderText;
+
+		@include darkMode {
+			color: $dHeaderText;
 		}
 	}
 }
