@@ -1,0 +1,8 @@
+.project_container {
+  display: grid;
+
+  .project_individual {
+    display: flex;
+    justify-content: space-between;
+  }
+}
