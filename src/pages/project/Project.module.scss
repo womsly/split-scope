@@ -1,0 +1,68 @@
+@import '../../styles/config';
+
+
+.project_header_container {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  border-bottom: solid 0.5px $lHeaderTextOpaque;
+  @include darkMode {
+    border-color: $dHeaderTextOpaque;
+  }
+
+  .header_search {
+    display: flex;
+    align-self: end;
+    gap: 0.5rem;
+  }
+}
+
+.project_container {
+  margin-top: 1rem;
+  padding: 1rem;
+
+  
+}
+.status_column_group {
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+  margin: 0px auto;
+  
+
+}
+.status_column {
+  width: 20rem;
+  background-color: $lColumnBackground;
+  padding-bottom: 2rem;
+  
+  @include darkMode {
+    background-color: $dColumnBackground;
+  }
+
+  .status_header {
+    display: grid;
+    grid-template-columns: 14rem 1rem 1rem;
+    gap: 0.5rem;
+    width: 90%;
+    padding: 0.5rem;
+    margin: 1rem;
+    margin-bottom: 2rem;
+    // background-color: $dHeaderOpaque;
+
+  }
+}
+
+
+
+.project_card {
+  width: 16rem;
+  margin: 0px auto;
+  
+  .card_date {
+    display: grid;
+    grid-template-columns: 14rem 1rem;
+    gap: 1rem;
+
+  }
+}
