@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import classes from './Sidebar.module.scss'
-import { AiOutlineHome, AiOutlineFile, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineFile } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 import { HiOutlineLockOpen } from "react-icons/hi";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -58,14 +58,14 @@ const manage = [
     action: "Employees",
     icon: <FiUsers />,
     path: "/employees",
-    authLevel: 1,
+    authLevel: 2,
   },
   {
     id: 2,
     action: "Clients",
     icon: <RiUserSettingsLine />,
     path: "/client",
-    authLevel: 1,
+    authLevel: 2,
   },
   {
     id: 3,
@@ -87,7 +87,10 @@ const manage = [
 
 
 function Sidebar() {
+
+  // to update with user info
   const [admin, setAdmin] = useState(true);
+
   return (
     <div className={classes.sidebar_container}>
       <div className={classes.sidebar_group}>
@@ -146,27 +149,27 @@ function Sidebar() {
           }
         </div>
         <div className={classes.sidebar_actions}>
-          <p>Admin</p>
-          {manage.map((admin) => {  
-            if (
-              (admin && admin.authLevel > 1) ||
-              (admin.authLevel === 1)
-              ) {
-              return(
-                <Link to={admin.path}
+          {admin ? 
+            <div>
+              <p>Admin</p>
+              {manage.map((admin) => {  
+                return(
+                  <Link to={admin.path}
                   key={admin.id}>
-                    <div className={classes.actions_group}>
-                      <div className={classes.action_type}>
+                      <div className={classes.actions_group}>
+                        <div className={classes.action_type}>
 
-                        {admin.icon}
-                        {admin.action} 
+                          {admin.icon}
+                          {admin.action} 
+                        </div>
+                        <RiArrowRightSLine />
                       </div>
-                      <RiArrowRightSLine />
-                    </div>
-                </Link>
-              )
-            }
-          })
+                  </Link>
+                )
+              })}
+            </div>
+            :
+            <></>
             
           }
         </div>
