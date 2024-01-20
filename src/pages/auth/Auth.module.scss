@@ -1,0 +1,81 @@
+@import "../../styles/config";
+
+
+.auth_container {
+  width: 100%;
+  display: flex;
+  gap: 4rem;
+  user-select: none;
+  
+  @include mdScreen {
+    flex-direction: column-reverse;
+  }
+  
+
+  
+  .panel_left {
+    width: 70%;
+    height: 100vmin;
+    padding: 4rem;
+    background-color: $lBackGroundOpaque;
+
+    @include darkMode {
+      background-color: $dBackGroundOpaque;
+    }
+
+    .img_wrapper {
+      max-width: 24rem;
+      padding-top: 4rem;
+      margin: auto;
+    }
+    
+    @include mdScreen {
+      width: 100%;
+      height: fit-content;
+      padding: 4rem;
+      .img_wrapper {
+        max-width: 256px;
+        margin: auto;
+      }
+      img {
+        width: 100%;
+      }
+    }
+
+    h1 {
+      width: 16rem;
+    }
+    
+  }
+  .panel_right {
+    width: 100%;
+    padding: 4rem;
+    display: grid;
+    min-width: 36rem;
+    
+
+    @include mdScreen {
+      min-width: 12rem;
+      gap: 4rem;
+    }
+
+    p {
+      text-align: right;
+    }
+
+    span {
+      color: $lButton;
+      cursor: pointer;
+
+      @include darkMode {
+        color: $dButton;
+      }
+    }
+
+
+    .form_wrapper {
+      width: fit-content;
+    }
+  }
+}
+
