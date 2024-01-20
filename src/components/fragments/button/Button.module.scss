@@ -1,0 +1,34 @@
+@import '../../../styles/config';
+
+.baseBtn {
+  cursor: pointer;
+  width: 5rem;
+  padding: 0.5rem;
+  font-weight: 500;
+  color: $lHeaderText;
+  background: transparent;
+  border: 2px solid $lHeaderText;
+  border-radius: 0.5rem;
+  outline: none;
+  box-shadow: $textShadowLight;
+  transition: .5s;
+
+
+  &:hover {
+    color: $lBackGround;
+    background-color: $lHeaderText;
+    border-color: $lHeaderText;
+  }
+
+  @include darkMode {
+    color: $dHeaderText;
+    border-color: $dHeaderText;
+
+    &:hover {
+      color: $dBackGround;
+      background-color: $dHeaderText;
+      border-color: $dHeaderText;
+
+    }
+  }
+}

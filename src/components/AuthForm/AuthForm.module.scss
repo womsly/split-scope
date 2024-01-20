@@ -1,0 +1,21 @@
+@import "../../styles/_config.scss";
+
+.form_container {
+  width: 100%;
+
+  form {
+    margin: 0px auto;
+    display: grid;
+    gap: 1rem;
+
+    input {
+      height: 2rem;
+      width: 12rem;
+      
+    }
+  }
+}
+
+.form_button {
+  width: fit-content !important; 
+}

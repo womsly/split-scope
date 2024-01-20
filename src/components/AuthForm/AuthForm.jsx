@@ -3,13 +3,19 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { toast } from 'react-hot-toast'
 import PropTypes from 'prop-types'
 import { auth } from "../../firebase";
+import classes from './AuthForm.module.scss'
+import Button from '../fragments/button/Button';
+import { companyAccount, userAccount } from '../../models/auth';
 
 function AuthForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [accountToken, setAccountToken] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [teamInvite, setTeamInvite] = useState("");
   const isCreateUser = props.createNewUser;
+  const isNewCompany = props.createNewCompanyAcct;
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -36,11 +42,11 @@ function AuthForm(props) {
 
   useEffect (() => {
 
-  }, [props.createNewUser])
+  }, [props.createNewUser, props.createNewCompanyAcct])
 
   if (isCreateUser) {
     return (
-      <div>
+      <div className={classes.form_container}>
         <form onSubmit={(e) => handleRegister(e)}>
           <input 
             type="email" 
@@ -62,14 +68,30 @@ function AuthForm(props) {
             placeholder='access token'
             value={accountToken}
             onChange={(e) => setAccountToken(e.target.value)}/>
+          {isNewCompany ? 
+            <input 
+              type='text' 
+              placeholder='company name'
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}/>
+          :
+            <input 
+              type='text' 
+              placeholder='team invite'
+              value={teamInvite}
+              onChange={(e) => setTeamInvite(e.target.value)}/>
+          }
   
-            <button type="submit">Create Account</button>
+            <Button 
+              type="submit" 
+              text="Create Account"
+              newClass={classes.form_button}/>
         </form>
       </div>
     )
   } else {
     return (
-      <div>
+      <div className={classes.form_container}>
         <form onSubmit={(e) => handleLogin(e)}>
           <input 
             type="email" 
@@ -82,7 +104,10 @@ function AuthForm(props) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}/>
   
-            <button type="submit">Log In</button>
+          <Button 
+              type="submit" 
+              text="Log In"
+              newClass={classes.form_button}/>
         </form>
       </div>
     )
@@ -93,5 +118,6 @@ function AuthForm(props) {
 export default AuthForm
 
 AuthForm.propTypes = {
-  createNewUser: PropTypes.bool
+  createNewUser: PropTypes.bool,
+  createNewCompanyAcct: PropTypes.bool
 }
