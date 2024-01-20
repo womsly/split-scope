@@ -8,14 +8,16 @@ import Button from '../fragments/button/Button';
 import { companyAccount, userAccount } from '../../models/auth';
 
 function AuthForm(props) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [accountToken, setAccountToken] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [teamInvite, setTeamInvite] = useState("");
-  const isCreateUser = props.createNewUser;
-  const isNewCompany = props.createNewCompanyAcct;
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isCreateUser, setIsCreateUser] = useState(true);
+  const [isNewCompany, setIsNewCompany] = useState(true);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,6 +34,8 @@ function AuthForm(props) {
     }
     else if (accountToken !== import.meta.env.VITE_APP_USER_TOKEN) {
       toast.error("Incorrect Account Token")
+    } else if (!agreeTerms) {
+      toast.error("Please Accept Terms and Conditions")
     } else {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -40,47 +44,92 @@ function AuthForm(props) {
     }
   }
 
-  useEffect (() => {
+  const handleFormType = (props) => {
+    setIsCreateUser(props.createNewUser);
+    setIsNewCompany(props.createNewCompanyAcct);
+  }
 
-  }, [props.createNewUser, props.createNewCompanyAcct])
+
+  useEffect (() => {
+    handleFormType(props);
+
+  }, [props, isCreateUser, isNewCompany])
 
   if (isCreateUser) {
     return (
       <div className={classes.form_container}>
+        <h2>Sign Up for Swift</h2>      
         <form onSubmit={(e) => handleRegister(e)}>
-          <input 
-            type="email" 
-            placeholder='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} />
-          <input 
-            type='password' 
-            placeholder='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}/>
-          <input 
-            type='password' 
-            placeholder='confirm password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}/>
-          <input 
-            type='text' 
-            placeholder='access token'
-            value={accountToken}
-            onChange={(e) => setAccountToken(e.target.value)}/>
-          {isNewCompany ? 
+          
+          <div className={classes.grouped_label}>
+            <label>Name</label>
+            <input
+              type="text" 
+              placeholder='Name'
+              value={name}
+              onChange={(e) => setName(e.target.value)} />
+          </div>
+
+          <div className={classes.grouped_label}>
+            <label>Email</label>
+            <input
+              type="email" 
+              placeholder='Email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} />
+          </div>
+
+          <div className={`${classes.grouped_label} ${classes.input_wide}`}>
+            <label>Password</label>
+            <input
+              type='password' 
+              placeholder='Password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}/>
+          </div>
+
+          <div className={`${classes.grouped_label} ${classes.input_wide}`}>
+            <label>Confirm Password</label>
             <input 
+              type='password' 
+              placeholder='Confirm Password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}/>
+          </div>
+
+          <div className={classes.grouped_label}>
+            {isNewCompany ? <label>Company</label> : <label>Team Invite</label>}
+            {isNewCompany ? 
+              <input 
               type='text' 
-              placeholder='company name'
+              placeholder='Company'
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}/>
-          :
-            <input 
+              :
+              <input 
               type='text' 
-              placeholder='team invite'
+              placeholder='Team Invite'
               value={teamInvite}
               onChange={(e) => setTeamInvite(e.target.value)}/>
-          }
+            }
+          </div>
+
+          <div className={classes.grouped_label}>
+            <label>Access Token</label>
+            <input 
+              type='text' 
+              placeholder='Access Token'
+              value={accountToken}
+              onChange={(e) => setAccountToken(e.target.value)}/>
+          </div>
+          <div className={`${classes.grouped_label} ${classes.input_wide} ${classes.terms_group}`}>
+            <input 
+              id="terms"
+              type='checkbox' 
+              value={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.value)}/>
+            <label for="terms">Creating an account means you're ok with our terms of service, privacy policy, and default notification settings.</label>
+          </div>
   
             <Button 
               type="submit" 
@@ -92,17 +141,25 @@ function AuthForm(props) {
   } else {
     return (
       <div className={classes.form_container}>
+        <h2>Sign In to Swift</h2>
         <form onSubmit={(e) => handleLogin(e)}>
-          <input 
-            type="email" 
-            placeholder='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)} />
-          <input 
-            type='password' 
-            placeholder='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}/>
+          <div className={`${classes.grouped_label} ${classes.input_wide}`}>
+            <label>Email</label>
+            <input
+              type="email" 
+              placeholder='Email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} />
+          </div>
+
+          <div className={`${classes.grouped_label} ${classes.input_wide}`}>
+            <label>Password</label>
+            <input
+              type='password' 
+              placeholder='Password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}/>
+          </div>
   
           <Button 
               type="submit" 
