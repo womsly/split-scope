@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../../context/AuthContext';
 import classes from './Sidebar.module.scss'
@@ -11,6 +11,7 @@ import { MdOutlinePayments, MdLogout } from "react-icons/md";
 import { PiStack } from "react-icons/pi";
 import { RiUserSettingsLine, RiArrowRightSLine  } from "react-icons/ri";
 import { TbArrowLoopRight2 } from "react-icons/tb";
+import { Axios } from 'axios';
 
 const actions = [
   {
@@ -89,7 +90,7 @@ const manage = [
 
 
 function Sidebar() {
-  const [admin, setAdmin] = useState(true);
+  const [admin, setAdmin] = useState(false);
   const {user, logout} = UserAuth()
   const navigate = useNavigate()
 
@@ -102,12 +103,16 @@ function Sidebar() {
     }
   }
 
+  useEffect(() => {
+    if (user.authLevel >= 5) { setAdmin(true) } else { setAdmin(false) }
+  }, [user])
+
   return (
     <div className={classes.sidebar_container}>
       <div className={classes.sidebar_group}>
         <div className={classes.sidebar_header}>
           <p>Welcome back</p>
-          <h2>{!user.displayName ? user.email : user.displayName}</h2>
+          <Link to="/account"><h2>{!user.displayName ? user.email : user.displayName}</h2></Link>
         </div>
         <div className={classes.sidebar_actions}>
           <p>Action</p>
