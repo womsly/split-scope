@@ -5,6 +5,7 @@ import { Home, Project } from '../pages'
 import Auth from '../pages/auth/Auth';
 import { AuthContextProvider } from '../context/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
+import Account from '../pages/account/Account';
 function CustomRouter() {
   const location = useLocation();
   return (
@@ -17,6 +18,7 @@ function CustomRouter() {
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
             <Route path='/project' element={<Project />} />
+            <Route path="/account" element={<Account />} />
           </Route>
         </Routes>
       </AuthContextProvider>
