@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { UserAuth } from '../../context/AuthContext';
 import classes from './Sidebar.module.scss'
+// icons
 import { AiOutlineHome, AiOutlineFile } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 import { HiOutlineLockOpen } from "react-icons/hi";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { MdOutlinePayments } from "react-icons/md";
+import { MdOutlinePayments, MdLogout } from "react-icons/md";
 import { PiStack } from "react-icons/pi";
 import { RiUserSettingsLine, RiArrowRightSLine  } from "react-icons/ri";
 import { TbArrowLoopRight2 } from "react-icons/tb";
@@ -87,16 +89,25 @@ const manage = [
 
 
 function Sidebar() {
-
-  // to update with user info
   const [admin, setAdmin] = useState(true);
+  const {user, logout} = UserAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      navigate("/auth")
+    } catch (e) {
+      appConsole.log(e)
+    }
+  }
 
   return (
     <div className={classes.sidebar_container}>
       <div className={classes.sidebar_group}>
         <div className={classes.sidebar_header}>
           <p>Welcome back</p>
-          <h2>User Name</h2>
+          <h2>{!user.displayName ? user.email : user.displayName}</h2>
         </div>
         <div className={classes.sidebar_actions}>
           <p>Action</p>
@@ -172,6 +183,19 @@ function Sidebar() {
             <></>
             
           }
+        </div>
+        <div className={classes.sidebar_actions}>
+          <div>
+            <a onClick={handleLogout}>
+              <div className={classes.actions_group}>
+                <div className={classes.action_type}>
+                  <MdLogout />
+                  Logout
+                </div>
+                <RiArrowRightSLine />
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </div>
