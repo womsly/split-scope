@@ -7,7 +7,7 @@ import hourglass from "../../assets/hourglass.png";
 
 function Auth() {
   const [newUser, setNewUser] = useState(true)
-  const [newCompany, setNewCompany] = useState(false)
+  const [newCompany, setNewCompany] = useState(true)
 
   const handleUser = (e) => {
     setNewUser(!newUser);

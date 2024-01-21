@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import { toast } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { auth } from "../../firebase";
 import classes from './AuthForm.module.scss'
 import Button from '../fragments/button/Button';
-import { companyAccount, userAccount } from '../../models/auth';
+import { UserAuth } from '../../context/AuthContext';
 
 function AuthForm(props) {
   const [name, setName] = useState("");
@@ -18,16 +17,22 @@ function AuthForm(props) {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [isCreateUser, setIsCreateUser] = useState(true);
   const [isNewCompany, setIsNewCompany] = useState(true);
+  const { createCompany, createUser, loginUser, user } = UserAuth();
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        appConsole.log(userCredential)
-      })
+
+    try {
+      await loginUser(email, password);
+      navigate("/");
+    } catch (e) {
+      appConsole.log(e.message);
+    }
   }
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       toast.error("Passwords Do Not Match")
@@ -37,10 +42,17 @@ function AuthForm(props) {
     } else if (!agreeTerms) {
       toast.error("Please Accept Terms and Conditions")
     } else {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          appConsole.log(userCredential)
-        })
+      try {
+        if (isNewCompany) {
+          await createCompany(email, password, name, companyName)
+        } else {
+          createUser(email, password, name, teamInvite)
+        }
+        
+        navigate("/")
+      } catch(e) {
+        appConsole.log(e.message);
+      }
     }
   }
 
