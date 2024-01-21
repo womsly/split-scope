@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Outlet, Navigate } from 'react-router-dom';
-import { UserAuth } from "../context/AuthContext";
+import { UserContext } from "../context/AuthContext";
 
-const ProtectedRoute = ({ children }) => {
-  const { user } = UserAuth();
+const ProtectedRoute = () => {
+  const { user, isLoading } = useContext(UserContext);
+  if (isLoading || isLoading === undefined) {
+    return <div>Loading...</div>;
+  }
 
   if (!user) {
     return (    
