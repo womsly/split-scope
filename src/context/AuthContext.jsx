@@ -6,12 +6,13 @@ import {
   onAuthStateChanged 
 } from 'firebase/auth'
 import { auth, db } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 export const AuthContextProvider = ({children}) => {
   const [user, setUser] = useState({})
+  const [isLoading, setIsLoading] = useState(true);
 
   const createUser = (email, password, name, teamInvite) => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -60,10 +61,41 @@ export const AuthContextProvider = ({children}) => {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      appConsole.log({"current user: ": currentUser});
-      setUser(currentUser);
-      appConsole.log({"userID: ": currentUser.uid})
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      try {
+        let q = query(collection(db, "companies"), where("userId", "==", currentUser?.uid))
+        let qSnap = await getDocs(q);
+
+        qSnap.forEach((doc) => {
+          if (doc.data()) {
+            currentUser.docId = doc.id;
+            currentUser.displayName = doc.data().company_name;
+            currentUser.authLevel = doc.data().auth_level;
+          }
+        })
+
+        if (!currentUser.docId)
+        {
+          setUser({})
+          // let userQ = query(collection(db, "users"), where("userId", "==", currentUser.uid))
+          // let userSnap = await getDocs(userQ);
+
+          // userSnap.forEach((doc) => {
+          // if (doc.data()) {
+          //   currentUser.docId = doc.id;
+          //   currentUser.companyId = doc.data().companyId;
+          //   currentUser.displayName = doc.data().full_name;
+          //   currentUser.authLevel = doc.data().auth_level;
+          // }
+        } else { 
+          setUser(currentUser);
+        }
+        
+        appConsole.log({"updated user": currentUser});
+        setIsLoading(false)
+      } catch (e) {
+        appConsole.log(e)
+      }
     })
 
     return () => {
@@ -73,7 +105,7 @@ export const AuthContextProvider = ({children}) => {
 
 
   return (
-    <UserContext.Provider value={{ createCompany, createUser, user, logout, loginUser }}>
+    <UserContext.Provider value={{ createCompany, createUser, user, logout, loginUser, isLoading }}>
       {children}
     </UserContext.Provider>
   )
