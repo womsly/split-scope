@@ -3,10 +3,13 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut,
-  onAuthStateChanged 
+  onAuthStateChanged,
+  GithubAuthProvider,
+  linkWithPopup,
+  unlink
 } from 'firebase/auth'
 import { auth, db } from "../firebase";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 
 export const UserContext = createContext();
 
@@ -60,6 +63,32 @@ export const AuthContextProvider = ({children}) => {
     return signOut(auth);
   }
 
+  const githubConnect = async() => {
+    try {
+        const userCred = await linkWithPopup(user, new GithubAuthProvider());
+        appConsole.log({"userCredential token": userCred})
+
+        const userRef = doc(db, "companies", user.docId)
+        await updateDoc(userRef, {
+          gh_tokenResponse: userCred._tokenResponse
+        })
+
+
+        setUser(userCred.user)
+      } catch (e) {
+        appConsole.log(e)
+      }
+  }
+
+  const githubDisconnect = async() => {
+    try {
+      const result = await unlink(user, "github.com")
+      setUser(result)
+    } catch (e) {
+      appConsole.log(e)
+    }
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
@@ -71,6 +100,7 @@ export const AuthContextProvider = ({children}) => {
             currentUser.docId = doc.id;
             currentUser.displayName = doc.data().company_name;
             currentUser.authLevel = doc.data().auth_level;
+            currentUser.ghTokenResponse = doc.data().gh_tokenResponse;
           }
         })
 
@@ -105,7 +135,17 @@ export const AuthContextProvider = ({children}) => {
 
 
   return (
-    <UserContext.Provider value={{ createCompany, createUser, user, logout, loginUser, isLoading }}>
+    <UserContext.Provider value={{ 
+        createCompany, 
+        createUser, 
+        user, 
+        logout, 
+        loginUser, 
+        isLoading,
+        githubConnect,
+        githubDisconnect
+       }
+      }>
       {children}
     </UserContext.Provider>
   )
