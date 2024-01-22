@@ -1,34 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Layout from '../../components/layout/LayoutTemplate'
-import { UserAuth } from '../../context/AuthContext'
-import { GithubAuthProvider, OAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { UserContext } from "../../context/AuthContext";
 
 function Account() {
-  const { user } = UserAuth;
-  const provider = new GithubAuthProvider();
-
-  const handleGithubSignIn = () => {
-    signInWithPopup(auth, provider)
-      .then(result => {
-        const credential = GithubAuthProvider.credentialFromResult(result);
-
-        const gitUser = result.user;
+  const [oldUser, setOldUser] = useState({})
+  const { user, githubConnect, githubDisconnect } = useContext(UserContext)
 
 
-        user.gitCredential = credential;
-        appConsole.log(gitUser)
-        appConsole.log(user);
-      })
-  }
-
-  const handleGithubSignOut = () => {
-    signOut(auth, provider)
-      .then(result => {
-        // Clear the GitHub credentials information from our state as well
-
-      })
-  }
 
   useEffect(() => {
     
@@ -39,7 +17,9 @@ function Account() {
       <div className="account-container">
 
       </div>
-      <button onClick={handleGithubSignIn} >Connect GitHub</button>
+      <button onClick={githubConnect} >Connect GitHub</button>
+      <button onClick={githubDisconnect} >Remove Github</button>
+      <p>{JSON.stringify(user.providerData)}</p>
     </Layout>
   )
 }
