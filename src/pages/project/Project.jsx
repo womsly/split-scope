@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Layout from '../../components/layout/LayoutTemplate'
 import classes from './Project.module.scss'
 import { columns, cards } from './data'
 import axios from 'axios';
+import { UserContext } from '../../context/AuthContext'
 
 function Project() {
-  const [updatedCards, setUpdatedCards] = useState(cards);
+  const [updatedCards, setUpdatedCards] = useState([]);
+  const { user } = useContext(UserContext)
 
   const getRepos = async () => {
     try {
-      // const orgRes = await axios.get(`https://api.github.com/users/a-shevlin/orgs`, {
-      //   headers: {
-      //     Authorization: `Bearer ${import.meta.env.VITE_APP_ACCESS_TOKEN}`
-      //   }
-      // })
+      appConsole.log(user.ghTokenResponse.oauthAccessToken)
+      const userRes = await axios.get(`https://api.github.com/user`, {
+        Authorization: `Bearer ${user.ghTokenResponse.oauthAccessToken}`
+      })
+      appConsole.log(userRes)
+
       let org = ""
       // if (orgRes.status === 200) {
       //   orgRes.data.forEach((userOrg) => {
