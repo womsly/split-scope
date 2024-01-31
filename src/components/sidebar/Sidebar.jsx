@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../../context/AuthContext';
 import classes from './Sidebar.module.scss'
 // icons
-import { AiOutlineHome, AiOutlineFile } from "react-icons/ai";
+import { AiOutlineClockCircle , AiOutlineFile } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 import { HiOutlineLockOpen } from "react-icons/hi";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -16,9 +16,9 @@ import { Axios } from 'axios';
 const actions = [
   {
     id: 1,
-    action: "Home",
-    icon: <AiOutlineHome />,
-    path: "/",
+    action: "Hours",
+    icon: <AiOutlineClockCircle  />,
+    path: "/home",
     authLevel: 1,
   },
   {
