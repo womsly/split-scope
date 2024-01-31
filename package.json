@@ -13,6 +13,7 @@
     "deploy": "env-cmd -e prod vite build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "@octokit/rest": "^20.0.2",
     "axios": "^1.6.5",
     "env-cmd": "^10.1.0",
     "firebase": "^10.7.2",
