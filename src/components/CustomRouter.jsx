@@ -13,10 +13,11 @@ function CustomRouter() {
       <AuthContextProvider>
         {/* providers listed here to wrap routes */}
         <Routes location={location} key={location.pathname}>
-          <Route path='/auth' element={<Auth />} />
+          {/* <Route path='/auth' element={<Auth />} /> */}
+          <Route path="/" element={<Auth />} />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
             <Route path='/project' element={<Project />} />
             <Route path="/account" element={<Account />} />
           </Route>

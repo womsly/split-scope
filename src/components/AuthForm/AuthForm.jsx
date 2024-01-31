@@ -26,7 +26,7 @@ function AuthForm(props) {
 
     try {
       await loginUser(email, password);
-      navigate("/");
+      navigate("/home");
     } catch (e) {
       appConsole.log(e.message);
     }

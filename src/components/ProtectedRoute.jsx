@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
 
   if (!user) {
     return (    
-      <Navigate to="/auth" />
+      <Navigate to="/" />
     )
   }
 
