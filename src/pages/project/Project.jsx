@@ -1,102 +1,90 @@
 import React, { useEffect, useState, useContext } from 'react'
 import Layout from '../../components/layout/LayoutTemplate'
 import classes from './Project.module.scss'
-import { columns, cards } from './data'
-import axios from 'axios';
 import { UserContext } from '../../context/AuthContext'
+import { columns, cards } from './data'
+import { GithubContext, GithubContextProvider } from '../../context/GitHubContext'
+
 
 function Project() {
   const [updatedCards, setUpdatedCards] = useState([]);
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
+  const { orgs, repos, getUserRepos, getUserOrgs } = useContext(GithubContext);
+  const [ selectedProject,  setSelectedProject ] = useState({});
 
-  const getRepos = async () => {
-    try {
-      appConsole.log(user.ghTokenResponse.oauthAccessToken)
-      const userRes = await axios.get(`https://api.github.com/user`, {
-        Authorization: `Bearer ${user.ghTokenResponse.oauthAccessToken}`
-      })
-      appConsole.log(userRes)
-
-      let org = ""
-      // if (orgRes.status === 200) {
-      //   orgRes.data.forEach((userOrg) => {
-      //     appConsole.log(userOrg.id)
-      //   })
-      // }
-      const response = await axios.get(`https://api.github.com/orgs/${org}/projects`, {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_APP_ACCESS_TOKEN}`
-        }
-      });
-      const repositories = response.data;
-      appConsole.log(response);
-      appConsole.log(repositories);
-    } catch (e) {
-      appConsole.error(e);
-    }
-  }
+  // const handleSelectedProject = (event) => {
+  //   event.prevent
+  // }
   
 
   useEffect(() => {
-    getRepos();
-  }, [updatedCards])
+    appConsole.log(orgs);
+  }, [])
 
 
   return (
-    <Layout>
-      <div className={classes.project_header_container}>
-        <div className={classes.header_text}>
-          <h1>Projects</h1>
-          <p>Overview of tasks to be completed</p>
-        </div>
-        <div className={classes.header_search}>
-          <input placeholder='search '/>
-          <button>Add Project</button>
-        </div>
-      </div>
+      <Layout>
+        <div className={classes.project_header_container}>
+          <div className={classes.header_text}>
+            <h1>Projects</h1>
+            <div>
+              <p>Overview of tasks to be completed</p>
+              <select
+                onChange={e => setSelectedProject(e.target.value)}
+              >
+                <options>test</options>
+              </select>
+            </div>
 
-      <div className={classes.project_container}>
-        <div className={classes.status_column_group}>
-          {columns.map((column) => {
-            return (
-              <div className={classes.status_column}>
-                <div className={classes.status_header} style={{ backGroundColor: column.color}}>
-                  <h3>{column.status}</h3>
-                  <button>+</button>
-                  <button>...</button>
-                </div>
-                {updatedCards.map((card) => {
-                  if (card.columnId == column.id)
-                  {
-                    return (
-                      <div 
-                        className={classes.project_card}
-                        // draggable
-                        // onDragStart={() => (dragCard.current = card.id)}
-                        // onDragEnter={() => (draggedOverColumn.current = column.id)}
-                        // onDragEnd={handleSort}
-                        // onDragOver={(e) => e.preventDefault()}
-                      >
-                        <div className={classes.card_date}>
-                          <p>{card.dateDue}</p>
-                          <button>...</button>
+          </div>
+          <div className={classes.header_search}>
+            <input placeholder='search '/>
+            <button onClick={() => getUserOrgs()}>View Orgs</button>
+          </div>
+        </div>
+
+        <div className={classes.project_container}>
+          <div className={classes.status_column_group}>
+            {columns.map((column) => {
+              return (
+                <div className={classes.status_column}>
+                  <div className={classes.status_header} style={{ backGroundColor: column.color}}>
+                    <h3>{column.status}</h3>
+                    <button>+</button>
+                    <button>...</button>
+                  </div>
+                  {updatedCards.map((card) => {
+                    if (card.columnId == column.id)
+                    {
+                      return (
+                        <div 
+                          className={classes.project_card}
+                          // draggable
+                          // onDragStart={() => (dragCard.current = card.id)}
+                          // onDragEnter={() => (draggedOverColumn.current = column.id)}
+                          // onDragEnd={handleSort}
+                          // onDragOver={(e) => e.preventDefault()}
+                        >
+                          <div className={classes.card_date}>
+                            <p>{card.dateDue}</p>
+                            <button>...</button>
+                          </div>
+                          <h3>{card.title}</h3>
+                          <p>{card.description}</p>
                         </div>
-                        <h3>{card.title}</h3>
-                        <p>{card.description}</p>
-                      </div>
-                    )
+                      )
+                    }
+                  })
+
                   }
-                })
+                </div>
+              )
+            })
 
-                }
-              </div>
-            )
-          })
-
-          }
+            }
+          </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
   )
 }
 
