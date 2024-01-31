@@ -92,6 +92,7 @@ export const AuthContextProvider = ({children}) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
+        setIsLoading(true)
         let q = query(collection(db, "companies"), where("userId", "==", currentUser?.uid))
         let qSnap = await getDocs(q);
 
