@@ -1,90 +1,61 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, {useContext, useState, useEffect } from 'react'
+import { GithubContext } from '../../context/GitHubContext';
 import Layout from '../../components/layout/LayoutTemplate'
-import classes from './Project.module.scss'
-import { UserContext } from '../../context/AuthContext'
-import { columns, cards } from './data'
-import { GithubContext, GithubContextProvider } from '../../context/GitHubContext'
 
 
 function Project() {
-  const [updatedCards, setUpdatedCards] = useState([]);
-  const { user } = useContext(UserContext);
-  const { orgs, repos, getUserRepos, getUserOrgs } = useContext(GithubContext);
+  const { 
+    orgs,
+    org, 
+    repos,
+    orgProjects, 
+    getUserRepos, 
+    getUserOrgs, 
+    getOrgProjects,
+    selectOrg,
+    getUserIssues,
+    issues,
+    teams,
+    getOrgTeams,
+    selectedRepo,
+    selectRepo,
+  } = useContext(GithubContext);
   const [ selectedProject,  setSelectedProject ] = useState({});
-
-  // const handleSelectedProject = (event) => {
-  //   event.prevent
-  // }
-  
-
-  useEffect(() => {
-    appConsole.log(orgs);
-  }, [])
+  const [updatedRepos, setUpdatedRepos] = useState([])
 
 
   return (
-      <Layout>
-        <div className={classes.project_header_container}>
-          <div className={classes.header_text}>
-            <h1>Projects</h1>
-            <div>
-              <p>Overview of tasks to be completed</p>
-              <select
-                onChange={e => setSelectedProject(e.target.value)}
-              >
-                <options>test</options>
-              </select>
-            </div>
+    <Layout>
+      <div>
+        <h1>Select a project to view details</h1>
 
-          </div>
-          <div className={classes.header_search}>
-            <input placeholder='search '/>
-            <button onClick={() => getUserOrgs()}>View Orgs</button>
-          </div>
+      </div>
+      <div>
+        <button  onClick={getUserOrgs}>Get User Orgs</button>
+        <button  onClick={() => selectOrg(orgs[0])}>Set User Orgs</button>
+        <button onClick={getOrgProjects}>Get Org Repo</button>
+        <button onClick={() => selectRepo(orgProjects)}>Set Repo</button>
+        <button onClick={getUserIssues}>Get Issues</button>
+        <button onClick={getOrgTeams}>Get Teams</button>
+        <p>
+
+          {JSON.stringify(org)}
+        </p>
+        <div>
+
+          {JSON.stringify(selectedRepo)}
         </div>
-
-        <div className={classes.project_container}>
-          <div className={classes.status_column_group}>
-            {columns.map((column) => {
-              return (
-                <div className={classes.status_column}>
-                  <div className={classes.status_header} style={{ backGroundColor: column.color}}>
-                    <h3>{column.status}</h3>
-                    <button>+</button>
-                    <button>...</button>
-                  </div>
-                  {updatedCards.map((card) => {
-                    if (card.columnId == column.id)
-                    {
-                      return (
-                        <div 
-                          className={classes.project_card}
-                          // draggable
-                          // onDragStart={() => (dragCard.current = card.id)}
-                          // onDragEnter={() => (draggedOverColumn.current = column.id)}
-                          // onDragEnd={handleSort}
-                          // onDragOver={(e) => e.preventDefault()}
-                        >
-                          <div className={classes.card_date}>
-                            <p>{card.dateDue}</p>
-                            <button>...</button>
-                          </div>
-                          <h3>{card.title}</h3>
-                          <p>{card.description}</p>
-                        </div>
-                      )
-                    }
-                  })
-
-                  }
-                </div>
-              )
-            })
-
-            }
-          </div>
+        <div>
+          {issues.map((issue) => {
+            if (issue.repository.id === selectedRepo.id)
+            return (
+              <p>{issue.title}</p>
+            )
+          })}
         </div>
-      </Layout>
+      </div>
+      
+    </Layout>
   )
 }
 
