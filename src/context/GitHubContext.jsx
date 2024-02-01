@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { UserContext } from "./AuthContext";
 import { Octokit } from "@octokit/rest";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 export const GithubContext = createContext();
 
@@ -61,6 +63,7 @@ export const GithubContextProvider = ({children}) => {
         handleSetOptions();
       }
       const response = await github.request(`GET ${path}`)
+      appConsole.log(response)
       return setOrgs(response.data)
     } catch (err) {
       setError(err.message || "Error loading user organizations");
@@ -115,6 +118,7 @@ export const GithubContextProvider = ({children}) => {
       issue.repository.owner.login === user.ghTokenResponse.screenName &&
       issue.repository.id === selectedRepo.id)
       appConsole.log(tempRes);
+      setResIsLoading(false);
       return setIssues(tempRes)
     } catch (err) {
       setError(err.message || "Error loading user issues");
@@ -163,22 +167,23 @@ export const GithubContextProvider = ({children}) => {
   }
 
   useEffect(() => {
-    const unsubscribe = () => {  
+    const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
       try {
-        if (user.id !== undefined) {
-          const octOptions = {
-            username: user.ghTokenResponse.screenName,
-            accessToken: user.ghTokenResponse.oauthAccessToken
+        setResIsLoading(true)
+        if (currentUser.id !== undefined) {
+          getUserOrgs
+          appConsole.log({"grabbed orgs": orgs})
+          if (orgs.length > 0) {
+            selectOrg(orgs[0]);
+            getOrgProjects;
+            selectRepo(orgProjects);
+            getOrgTeams;
           }
-          setOptions(octOptions)
-        } else {
-          setOptions({})
         }
-      } catch(err) {
-        
+      } catch (err) {
+        setError(err.message || "Error loading github user data")
       }
-    }
-    
+    })
     return () => {
       unsubscribe();
     }

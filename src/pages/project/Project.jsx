@@ -22,6 +22,23 @@ function Project() {
   } = useContext(GithubContext);
   const [ selectedProject,  setSelectedProject ] = useState({});
   const [updatedRepos, setUpdatedRepos] = useState([])
+  const [projectError, setProjectError] = useState("")
+
+
+  // useEffect( () => {
+  //   const fetchData = async () => {
+  //     appConsole.log({"grabbed orgs": orgs})
+  //     if (orgs.length > 0) {
+  //       selectOrg(orgs[0]);
+  //       getOrgProjects;
+  //       selectRepo(orgProjects);
+  //       getOrgTeams;
+  //     } else {
+  //       setProjectError("Could not load orgs")
+  //     }
+  //   }
+  //   fetchData();
+  // }, [])
 
 
   return (
@@ -37,6 +54,7 @@ function Project() {
         <button onClick={() => selectRepo(orgProjects)}>Set Repo</button>
         <button onClick={getUserIssues}>Get Issues</button>
         <button onClick={getOrgTeams}>Get Teams</button>
+        <p>{projectError}</p>
         <p>
 
           {JSON.stringify(org)}
