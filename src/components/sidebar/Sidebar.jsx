@@ -123,7 +123,7 @@ function Sidebar() {
               ) {
               return(
                 <Link to={action.path}
-                  key={action.id}>
+                  key={`${action.id}_${action.path}`}>
                     <div className={classes.actions_group}>
                       <div className={classes.action_type}>
 
@@ -148,7 +148,7 @@ function Sidebar() {
               ) {
               return(
                 <Link to={team.path}
-                  key={team.id}>
+                  key={`${team.id}_${team.path}`}>
                     <div className={classes.actions_group}>
                       <div className={classes.action_type}>
 
@@ -171,7 +171,7 @@ function Sidebar() {
               {manage.map((admin) => {  
                 return(
                   <Link to={admin.path}
-                  key={admin.id}>
+                  key={`${admin.id}_${admin.path}`}>
                       <div className={classes.actions_group}>
                         <div className={classes.action_type}>
 
