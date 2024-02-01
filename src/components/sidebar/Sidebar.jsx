@@ -97,7 +97,7 @@ function Sidebar() {
   const handleLogout = async () => {
     try {
       await logout()
-      navigate("/auth")
+      navigate("/")
     } catch (e) {
       appConsole.log(e)
     }
