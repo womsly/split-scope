@@ -1,0 +1,22 @@
+@import  '../../styles/_config.scss';
+
+.header_container {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  border-bottom: solid 0.5px $lHeaderTextOpaque;
+  @include darkMode {
+    border-color: $dHeaderTextOpaque;
+  }
+
+  .header_search {
+    display: flex;
+    align-self: end;
+    gap: 0.5rem;
+  }
+}
+
+.page_container {
+  margin-top: 1rem;
+  padding: 1rem;
+}
