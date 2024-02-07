@@ -7,6 +7,7 @@ import { AuthContextProvider } from '../context/AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import Account from '../pages/account/Account';
 import { GithubContextProvider } from '../context/GitHubContext';
+import AuthRoute from './AuthRoute';
 function CustomRouter() {
   const location = useLocation();
   return (
@@ -17,7 +18,9 @@ function CustomRouter() {
           {/* providers listed here to wrap routes */}
           <Routes location={location} key={location.pathname}>
             {/* <Route path='/auth' element={<Auth />} /> */}
-            <Route path="/" element={<Auth />} />
+            <Route element={ <AuthRoute />} >
+              <Route path="/" element={<Auth />} />
+            </Route>
 
             <Route element={<ProtectedRoute />}>
               <Route path="/home" element={<Home />} />
