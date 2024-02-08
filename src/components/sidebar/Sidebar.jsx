@@ -4,12 +4,13 @@ import { UserAuth } from '../../context/AuthContext';
 import classes from './Sidebar.module.scss'
 // icons
 import { AiOutlineClockCircle , AiOutlineFile } from "react-icons/ai";
+import { CiLogout } from "react-icons/ci";
 import { FiUsers } from "react-icons/fi";
 import { HiOutlineLockOpen } from "react-icons/hi";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { MdOutlinePayments, MdLogout } from "react-icons/md";
+import { MdOutlinePayments, MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight  } from "react-icons/md";
 import { PiStack } from "react-icons/pi";
-import { RiUserSettingsLine, RiArrowRightSLine  } from "react-icons/ri";
+import { RiUserSettingsLine  } from "react-icons/ri";
 import { TbArrowLoopRight2 } from "react-icons/tb";
 import { Axios } from 'axios';
 
@@ -91,6 +92,7 @@ const manage = [
 
 function Sidebar() {
   const [admin, setAdmin] = useState(false);
+  const [small, setSmall] = useState(false);
   const {user, logout} = UserAuth()
   const navigate = useNavigate()
 
@@ -103,87 +105,95 @@ function Sidebar() {
     }
   }
 
+  const handleSidebarShrink = () => {
+    setSmall(!small);
+  }
+
   useEffect(() => {
     if (user.authLevel >= 5) { setAdmin(true) } else { setAdmin(false) }
   }, [user])
 
   return (
-    <div className={classes.sidebar_container}>
+    <div className={small ? classes.shrunk : classes.sidebar_container}>
       <div className={classes.sidebar_group}>
         <div className={classes.sidebar_header}>
-          <p>Welcome back</p>
-          <Link to="/account"><h2>{!user.displayName ? user.email : user.displayName}</h2></Link>
+          {!small ? <Link to="/account"><h2>{!user.displayName ? user.email : user.displayName}</h2></Link> : "" }
+          <span onClick={handleSidebarShrink}>
+            {!small ? <MdKeyboardDoubleArrowLeft /> : <MdKeyboardDoubleArrowRight /> }
+          </span>
         </div>
         <div className={classes.sidebar_actions}>
-          <p>Action</p>
-          {actions.map((action) => {  
-            if (
-              (admin && action.authLevel > 1) ||
-              (action.authLevel === 1)
-              ) {
-              return(
-                <Link to={action.path}
-                  key={`${action.id}_${action.path}`}>
-                    <div className={classes.actions_group}>
-                      <div className={classes.action_type}>
+          {/* <p>Action</p> */}
+          <div className={classes.sidebar_actions_details}>
 
-                        {action.icon}
-                        {action.action} 
-                      </div>
-                      <RiArrowRightSLine />
-                    </div>
-                </Link>
-              )
-            }
-          })
-            
-          }
-        </div>
-        <div className={classes.sidebar_actions}>
-          <p>Team</p>
-          {team.map((team) => {  
-            if (
-              (admin && team.authLevel > 1) ||
-              (team.authLevel === 1)
-              ) {
-              return(
-                <Link to={team.path}
-                  key={`${team.id}_${team.path}`}>
-                    <div className={classes.actions_group}>
-                      <div className={classes.action_type}>
-
-                        {team.icon}
-                        {team.action} 
-                      </div>
-                      <RiArrowRightSLine />
-                    </div>
-                </Link>
-              )
-            }
-          })
-            
-          }
-        </div>
-        <div className={classes.sidebar_actions}>
-          {admin ? 
-            <div>
-              <p>Admin</p>
-              {manage.map((admin) => {  
+            {actions.map((action) => {  
+              if (
+                (admin && action.authLevel > 1) ||
+                (action.authLevel === 1)
+                ) {
                 return(
-                  <Link to={admin.path}
-                  key={`${admin.id}_${admin.path}`}>
+                  <Link to={action.path}
+                    key={`${action.id}_${action.path}`}>
                       <div className={classes.actions_group}>
                         <div className={classes.action_type}>
 
-                          {admin.icon}
-                          {admin.action} 
+                          {action.icon}
+                          {small ? "": action.action} 
                         </div>
-                        <RiArrowRightSLine />
                       </div>
                   </Link>
                 )
-              })}
-            </div>
+              }
+            })
+              
+            }
+          </div>
+        </div>
+        <div className={classes.sidebar_actions}>
+          {/* <p>Team</p> */}
+          <div className={classes.sidebar_actions_details}>
+            {team.map((team) => {  
+              if (
+                (admin && team.authLevel > 1) ||
+                (team.authLevel === 1)
+                ) {
+                return(
+                  <Link to={team.path}
+                    key={`${team.id}_${team.path}`}>
+                      <div className={classes.actions_group}>
+                        <div className={classes.action_type}>
+
+                          {team.icon}
+                          {small ? "": team.action} 
+                        </div>
+                      </div>
+                  </Link>
+                )
+              }
+            })}
+          </div>
+        </div>
+        <div className={classes.sidebar_actions}>
+          {admin ? 
+            <>
+              {/* <p>Admin</p> */}
+              <div className={classes.sidebar_actions_details}>
+                {manage.map((admin) => {  
+                  return(
+                    <Link to={admin.path}
+                    key={`${admin.id}_${admin.path}`}>
+                        <div className={classes.actions_group}>
+                          <div className={classes.action_type}>
+
+                            {admin.icon}
+                            {small ? "": admin.action} 
+                          </div>
+                        </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </>
             :
             <></>
             
@@ -194,10 +204,10 @@ function Sidebar() {
             <a onClick={handleLogout}>
               <div className={classes.actions_group}>
                 <div className={classes.action_type}>
-                  <MdLogout />
-                  Logout
+                  <CiLogout />
+                  {small ? "": "Log out"} 
                 </div>
-                <RiArrowRightSLine />
+
               </div>
             </a>
           </div>
