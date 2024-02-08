@@ -46,7 +46,7 @@ html {
 body {
 	display: flex;
 	justify-content: center;
-	min-height: 100dvh;
+	height: 100vmin;
 	background-color: $lBackGround;
 	color: $lHeaderText;
 	
